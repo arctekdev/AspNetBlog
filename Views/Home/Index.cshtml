@@ -1,0 +1,29 @@
+@{
+	// Anything in between these two curly braces will be handled by
+	// the razor templating engine
+	// basically you can put almost any C# code in here and expect it to work
+	// Observe
+	string test = "Test";
+	string test2 = "123";
+	string newString = String.Format("{0} {1}", test, test2);
+
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1>Dave, I'm home!!</h1>
+<h2>@newString</h2>
+<p>
+	Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+	Optio voluptatibus illo eligendi nesciunt dolor sunt rem
+	suscipit, quo, nemo recusandae earum impedit magni
+	mollitia quod omnis nulla voluptatum. Quisquam, quis.
+</p>
+
+<section class="posts">
+	@foreach (var post in Model){
+        <div class="post">
+            <h2>@post.Title</h2>
+            <p>@post.Excerpt</p>
+            <a href="@post.Title.Replace(' ','-')">read more</a>
+        </div>
+    }
+</section>
