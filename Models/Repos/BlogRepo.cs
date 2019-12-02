@@ -51,7 +51,19 @@ namespace Blog.Models.Repos{
                     Excerpt = "in the future",
                     Content = "Post scheduling made super easy",
                     Created = DateTime.Now.AddDays(3) // Post scheduling made easy
-                }
+                },
+                new Post(){
+                    Title = "Markdown Test",
+                    Public = true,
+                    CoverImagePath = "", // blank
+                    Excerpt = "Let's see what markdown can do",
+                    Content =   "# Hello world\n"+ 
+                                "**Lorem** ipsum dolor sit"+ 
+                                "amet, *consectetur* adipiscing elit. Sed"+ 
+                                "eu est nec metus luctus tempus. Pellentesque"+ 
+                                "at elementum sapien, ac faucibus sem"+
+                                "![surprise](https://media.giphy.com/media/fdyZ3qI0GVZC0/giphy.gif)"
+                },
             };
             try{
                 // This will ensure that the title of the post is unique

@@ -1,0 +1,10 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<section class="post">
+    <h1>@Model.Title</h1>
+    <p class="content">
+        @Html.Raw(Markdig.Markdown.ToHtml(Model.Content))
+    </p>
+    <a href="/">Back</a>
+</section>
