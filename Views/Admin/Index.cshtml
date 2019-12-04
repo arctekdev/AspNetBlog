@@ -1,0 +1,49 @@
+@{
+	Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<a href="/admin/new/post"><button class="new-post">New</button></a>
+<div class="table">
+	@foreach (var post in Model){
+		<div class="row">
+			<div class="cell">
+				<input type="checkbox">
+			</div>
+			<div class="cell">
+				@post.Title
+			</div>
+			
+			<div class="cell control">
+				<button class="edit" post="@post.Title.Replace(' ','-')">Edit</button>
+			</div>
+			<div class="cell control">
+				<button class="delete" post="@post.Title.Replace(' ','-')">Delete</button>
+			</div>
+		</div>
+	}
+</div>
+
+<style>
+	.table{
+		display:flex;
+		flex-direction: column;
+		width:100%;
+	}
+	.table .row{
+		display:grid;
+		grid-template-columns: auto 1fr 1fr 1fr;
+		padding:5px 0px;
+	}
+	.table .row .cell.control{
+		text-align: right;
+	}
+	.table .row:nth-child(2n+2){
+		background: #eee;
+	}
+	.table a{
+		text-decoration: none;
+	}
+</style>
+
+<script>
+	
+</script>
