@@ -1,9 +1,12 @@
+using System.IO;
+using System.Net.Http;
 using System.Linq;
 using System;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Blog.Models.Repos;
 using Blog.Models;
+using Blog.Models.Requests;
 namespace Blog.Controllers{
     [Route("/admin")]
     public class AdminController : Controller{
@@ -27,27 +30,39 @@ namespace Blog.Controllers{
             return View();
         }
 
-        // This method won't return anything but a status code
-        // that is because we'll be sending the post as a json string
-        // via javascript and then reacting to it without reloading the page
         [HttpPost, Route("new/post")]
-        public IActionResult NewPost([FromBody]Post post){
-            BlogRepo.Posts.Insert(post);
-
-            // set up the indices 
-            BlogRepo.Posts.EnsureIndex(p => p.Title,true); // ensures that the title is unique
-            BlogRepo.Posts.EnsureIndex(p => p._id, true); // ensures that the row has a valid bson index
-
-            // check if the post has actually been created
-            if(BlogRepo.Posts.Find(p => p.Title == post.Title).FirstOrDefault() != null ){
-                // if the post actually exists return status code 201 - Created
+        public IActionResult NewPost([FromForm] PostRequest PostReq){
+            if(BlogRepo.Posts.Exists(p => p.Title == PostReq.Title)){
+                return Content("Already exists");
+            }
+            Post Post = new Post(){
+                Content = PostReq.Content,
+                Title = PostReq.Title,
+                Public = true,
+            };
+            var image = PostReq.Image;
+            var imgPath = Path.Join("wwwroot/assets/images",image.FileName);
+            if(image.Length > 0){
+                using(FileStream fs = new FileStream( imgPath, FileMode.Create)) {
+                    image.CopyTo(fs);
+                }
+            }
+            if(System.IO.File.Exists(imgPath)){
+                Post.CoverImagePath = imgPath;
+            }
+            BlogRepo.Posts.EnsureIndex(p => p.Title, true); 
+            BlogRepo.Posts.EnsureIndex(p => p._id, true);
+            BlogRepo.Posts.Insert(Post);
+            if(BlogRepo.Posts.Exists(p => p.Title == PostReq.Title)){
                 return StatusCode(201);
             }
-            // We'll just assume something was wrong with the request
-            // in an actual serious application we'd obviously do a bit more
-            // to return a proper response to the user
-            // which would allow the user to correct his mistake
             return StatusCode(400);
+        }
+        [HttpGet, Route("/admin/edit/{postTitle}")]
+        public IActionResult PostEdit([FromRoute]string postTitle){
+            postTitle = postTitle.Replace("-", " ");
+            Post Post = BlogRepo.Posts.Find(p => p.Title == postTitle).FirstOrDefault();
+            return View(Post);
         }
 
         // Http DELETE method 
@@ -59,7 +74,7 @@ namespace Blog.Controllers{
             BlogRepo.Posts.Delete(p => p.Title == postTitle);
             // We check the exact opposite of what we checked in post create
             // namely if the post does not exist anymore then we're all good
-            if(BlogRepo.Posts.Find(p => p.Title == postTitle).FirstOrDefault() == null){
+            if(!BlogRepo.Posts.Exists(p => p.Title == postTitle)){
                 return StatusCode(200);
             }
             return StatusCode(400);

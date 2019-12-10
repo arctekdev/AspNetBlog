@@ -13,7 +13,9 @@
 			</div>
 			
 			<div class="cell control">
-				<button class="edit" post="@post.Title.Replace(' ','-')">Edit</button>
+				<a href="/admin/edit/@post.Title.Replace(' ','-')">
+					<button class="edit" post="@post.Title.Replace(' ','-')">Edit</button>
+				</a>
 			</div>
 			<div class="cell control">
 				<button class="delete" post="@post.Title.Replace(' ','-')">Delete</button>
@@ -45,5 +47,18 @@
 </style>
 
 <script>
+	var deleteBtns = document.querySelectorAll(".delete");
+	for (var deleteButton of deleteBtns) {
+		deleteButton.onclick = function (ev) {
+			console.log("del button clicked");
+			fetch('admin/post/delete', {
+				method: 'delete',
+				body: JSON.stringify(deleteButton.getAttribute("post")),
+				headers: new Headers({'content-type': 'application/json'})
+			}).then((ev) => {
+				console.log(ev);
+			});
+		}
+	}
 	
 </script>

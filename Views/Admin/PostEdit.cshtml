@@ -1,0 +1,104 @@
+@{
+    Layout = "~/Views/Shared/_adminLayout.cshtml";
+}
+<form action="new/post" method="post" id="newpost" class="new-post-wrapper">
+    <header>
+        <a href="/admin">BACK</a>
+    </header>
+    <input type="text" name="title" class="title" id="title" placeholder="Title" value="@Model.Title" />
+    <textarea name="content" id="post">@Model.Content</textarea>
+    <footer>
+        <a id="preview" href="#preview">
+            PREVIEW
+        </a>
+        <a id="publish" href="#publish">
+            PUBLISH
+        </a>
+        <a id="cancel" href="/admin">
+            CANCEL
+        </a>
+    </footer>
+</form>
+</form>
+<script>
+</script>
+<style>
+    .new-post-wrapper{
+        width:100vw;
+        height:100vh;
+        background:#eee;
+        padding:20px;
+        display:flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .new-post-wrapper header{
+        width:100%;
+        max-width: 850px;;
+        display:flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .new-post-wrapper header button{
+        border:5px solid black;
+        font-weight:bold;
+        cursor: pointer;
+        padding:10px 25px;
+    }
+    .header-img{
+        float:right;
+    }
+    input[type="text"], textarea, button{
+        border:none;
+        outline:none;
+    }
+    .title{
+        min-width:300px;
+        width: 100%;
+        max-width: 850px;
+        padding:10px;
+        margin:5px 0px;
+        font-size:1.5em;
+        font-weight: bold;
+    }
+    textarea{
+        display:block;
+        position: relative;
+        width:100%;
+        height:100%;
+        resize:none;
+        padding:10px 25px;
+        max-width: 850px;
+        font-size:1.3em;
+        line-height: 1.5;
+        font-family: sans-serif;
+        color:#333;
+    }
+    footer{
+        min-height:50px;
+        display:flex;
+    }
+    .new-post-wrapper a{
+        text-decoration: none;
+        color:black;
+        padding:10px 25px;
+        font-size:1.3em;
+        cursor: pointer;
+        border-radius:5px;
+        margin:20px 5px 0px 0px;
+        font-weight:bold;
+        display:flex;
+        align-items: center;
+    }
+    #preview{
+        background:#ccc;
+    }
+    #publish{
+        background:teal;
+        color:white;
+    }
+    #cancel{
+        background:crimson;
+        color:white;
+    }
+</style>
